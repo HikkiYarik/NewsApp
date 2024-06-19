@@ -63,7 +63,7 @@ const newsService = (function () {
   return {
     topHeadlines(country = "ua", callback) {
       http.get(
-        `${apiUrl}/top-headlines?country=${country}&apiKey=${apiKey}`,
+        `${apiUrl}/top-headlines?country=${country}&category=technology&apiKey=${apiKey}`,
         callback
       );
     },
@@ -72,6 +72,16 @@ const newsService = (function () {
     },
   };
 })();
+// Elements
+const form = document.forms['newsControls'];
+const countrySelect = form.elements['country'];
+const searchInput = form.elements['search'];
+
+
+form.addEventListener('submit', (e)=> {
+  e.preventDefault();
+  loadNews()
+})
 
 //  init selects
 document.addEventListener("DOMContentLoaded", function () {
@@ -81,22 +91,55 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Load news function
 function loadNews() {
-  newsService.topHeadlines('ua', onGetResponse)
+  const country = countrySelect.value;
+  const searchText = searchInput.value;
+console.log(country)
+console.log(searchText)
+  if(!searchText){
+    newsService.topHeadlines(country, onGetResponse)
+  } else if(searchText) {
+    newsService.everything(searchText, onGetResponse)
+  }
+  
 }
 // On get response from server
 function onGetResponse(err, res) {
-  console.log(res);
+  if (err){
+    showAlert(err, 'error-msg')
+    return;
+  }
+  if(!res.articles.length){
+    //show empty message
+
+    return;
+  }
   renderNews(res.articles)
 }
+// if error, show error
+function showAlert(msg, type= 'success'){
+  M.toast({html : msg, classes: type})
+}
+
 // function render news
 function renderNews(news){
   const newsContainer = document.querySelector('.news-container .row');
+  if(newsContainer.children.length){
+    cleanContainer(newsContainer)
+  }
   let fragment = ''
   news.forEach(newsItem => {
     const el = newsTemplate(newsItem);
     fragment += el;
   });
-  newsContainer.insertAdjacentHTML("beforebegin", fragment)
+  newsContainer.insertAdjacentHTML("afterbegin", fragment)
+}
+// function clean container
+function cleanContainer(container){
+  let child = container.lastElementChild;
+  while(child){
+    container.removeChild(child)
+    child = container.lastElementChild;
+  }
 }
 
 // news item template func
@@ -113,9 +156,10 @@ function newsTemplate({urlToImage, title, url, description}){
           <p>${description || ''}</p>
         </div>
         <div class="card-action">
-          <a href="${url}">Read more</a>
+          <a target="_blank" href="${url}">Read more</a>
         </div>
       </div>
     </div>  
   `
 }
+
