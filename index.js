@@ -91,10 +91,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Load news function
 function loadNews() {
+  showLoader()
   const country = countrySelect.value;
   const searchText = searchInput.value;
-console.log(country)
-console.log(searchText)
   if(!searchText){
     newsService.topHeadlines(country, onGetResponse)
   } else if(searchText) {
@@ -104,13 +103,14 @@ console.log(searchText)
 }
 // On get response from server
 function onGetResponse(err, res) {
+  removePreloader()
   if (err){
     showAlert(err, 'error-msg')
     return;
   }
   if(!res.articles.length){
     //show empty message
-
+    // если новостей нет выводить empty message
     return;
   }
   renderNews(res.articles)
@@ -135,11 +135,12 @@ function renderNews(news){
 }
 // function clean container
 function cleanContainer(container){
-  let child = container.lastElementChild;
-  while(child){
-    container.removeChild(child)
-    child = container.lastElementChild;
-  }
+  container.innerHTML = ''
+  // let child = container.lastElementChild;
+  // while(child){
+  //   container.removeChild(child)
+  //   child = container.lastElementChild;
+  // }
 }
 
 // news item template func
@@ -163,3 +164,21 @@ function newsTemplate({urlToImage, title, url, description}){
   `
 }
 
+// Show loader function
+function showLoader(){
+  document.body.insertAdjacentHTML(
+    'afterbegin',
+    `
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    `)
+}
+
+// Remove loader function
+function removePreloader(){
+  const loader = document.querySelector('.progress');
+  if(loader){
+    loader.remove();
+  }
+}
