@@ -110,7 +110,11 @@ function onGetResponse(err, res) {
   }
   if(!res.articles.length){
     //show empty message
-    // если новостей нет выводить empty message
+    const newsContainer = document.querySelector('.news-container .row');
+    if(newsContainer.children.length){
+      cleanContainer(newsContainer)
+    }
+    showEmptyMessage()
     return;
   }
   renderNews(res.articles)
@@ -118,6 +122,24 @@ function onGetResponse(err, res) {
 // if error, show error
 function showAlert(msg, type= 'success'){
   M.toast({html : msg, classes: type})
+}
+
+// try to show empty message v0.1
+function showEmptyMessage(){
+  document.body.insertAdjacentHTML(
+    'afterbegin',
+    `
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+    `
+  )
 }
 
 // function render news
