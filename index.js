@@ -130,7 +130,7 @@ function showAlert(msg, type= 'success'){
   M.toast({html : msg, classes: type})
 }
 
-// try to show empty message v0.1
+// try to show empty message
 function showEmptyMessage(){
   modalBtn.style.display = 'flex'
   modalBtn.classList.add('active')
