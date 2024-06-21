@@ -1,3 +1,6 @@
+const newsContainer = document.querySelector('.news-container .row');
+const searchBtn = document.querySelector('.search-button')
+const modalBtn = document.querySelector('.modal-button')
 // Custom Http Module
 function customHttp() {
   return {
@@ -105,19 +108,22 @@ function loadNews() {
 function onGetResponse(err, res) {
   removePreloader()
   if (err){
+    modalBtn.style.display = 'none'
+    modalBtn.classList.remove('active')
+    searchBtn.style.display = 'flex';
     showAlert(err, 'error-msg')
     return;
   }
   if(!res.articles.length){
     //show empty message
-    const newsContainer = document.querySelector('.news-container .row');
-    if(newsContainer.children.length){
-      cleanContainer(newsContainer)
-    }
+    cleanContainer(newsContainer)
     showEmptyMessage()
+    removeEmptyMessage()
     return;
   }
-  renderNews(res.articles)
+    renderNews(res.articles)
+  
+  
 }
 // if error, show error
 function showAlert(msg, type= 'success'){
@@ -126,43 +132,34 @@ function showAlert(msg, type= 'success'){
 
 // try to show empty message v0.1
 function showEmptyMessage(){
-  document.body.insertAdjacentHTML(
-    'afterbegin',
-    `
-    <div id="modal1" class="modal">
-      <div class="modal-content">
-        <h4>Modal Header</h4>
-        <p>A bunch of text</p>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-      </div>
-    </div>
-    `
-  )
+  modalBtn.style.display = 'flex'
+  modalBtn.classList.add('active')
+  searchBtn.style.display = 'none';
+  modalBtn.click();
 }
-
+// remove empty msg function
+function removeEmptyMessage(){
+  modalBtn.style.display = 'none'
+  modalBtn.classList.remove('active')
+  searchBtn.style.display = 'flex';
+}
 // function render news
 function renderNews(news){
-  const newsContainer = document.querySelector('.news-container .row');
+    searchBtn.classList.remove('modal-trigger')
+    searchBtn.removeAttribute('data-target')
   if(newsContainer.children.length){
     cleanContainer(newsContainer)
   }
-  let fragment = ''
+  let fragment = '';
   news.forEach(newsItem => {
     const el = newsTemplate(newsItem);
     fragment += el;
   });
-  newsContainer.insertAdjacentHTML("afterbegin", fragment)
+  newsContainer.insertAdjacentHTML("afterbegin", fragment);
 }
 // function clean container
 function cleanContainer(container){
   container.innerHTML = ''
-  // let child = container.lastElementChild;
-  // while(child){
-  //   container.removeChild(child)
-  //   child = container.lastElementChild;
-  // }
 }
 
 // news item template func
@@ -199,6 +196,8 @@ function showLoader(){
 
 // Remove loader function
 function removePreloader(){
+    // searchBtn.classList.remove('modal-trigger')
+    // searchBtn.removeAttribute('data-target')
   const loader = document.querySelector('.progress');
   if(loader){
     loader.remove();
