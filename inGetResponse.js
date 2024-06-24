@@ -38,12 +38,13 @@ function ifEmptyImg(articles){
     return
   }
 
-  // if empty news
-  // function ifEmptyNews(articles){
- 
-  //   articles.forEach(el => {
-  //     if(el.description == '[Removed]' || el.title == '[Removed]' || el.description == null || el.title == null){
-        
-  //     }
-  //   })
-  // }
+  /// if empty news
+  function ifEmptyNews(articles){
+    articles.forEach((el, index) => {
+      if(el.description == '[Removed]' || el.title == '[Removed]' || el.description == null || el.title == null){
+        articles.splice(index, 1)
+      }
+      
+    })
+    
+  }
