@@ -32,19 +32,19 @@ function cleanContainer(container){
 function ifEmptyImg(articles){
     articles.forEach(el => {
       if(el.urlToImage == null){
-        el.urlToImage = 'https://liftshop24.ru/custom/custom31_07_2018_15_15/img/not-image.png'
+        el.urlToImage = 'https://www.jsconsulting.kz/assets/img/noImg.jpg'
       } 
     })
     return
   }
 
-  /// if empty news
+//  if empty news
   function ifEmptyNews(articles){
     articles.forEach((el, index) => {
       if(el.description == '[Removed]' || el.title == '[Removed]' || el.description == null || el.title == null){
-        articles.splice(index, 1)
+        articles.splice(index,1)
       }
-      
     })
-    
   }
+
+  
