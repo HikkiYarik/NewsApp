@@ -1,54 +1,54 @@
 // Custom Http Module
 function customHttp() {
     return {
-      get(url, cb) {
+      get(url, callback) {
         try {
-          const xhr = new XMLHttpRequest();
-          xhr.open("GET", url);
-          xhr.addEventListener("load", () => {
-            if (Math.floor(xhr.status / 100) !== 2) {
-              cb(`Error. Status code: ${xhr.status}`, xhr);
+          const request = new XMLHttpRequest();
+          request.open("GET", url);
+          request.addEventListener("load", () => {
+            if (Math.floor(request.status / 100) !== 2) {
+              callback(`Error. Status code: ${request.status}`, request);
               return;
             }
-            const response = JSON.parse(xhr.responseText);
-            cb(null, response);
+            const response = JSON.parse(request.responseText);
+            callback(null, response);
           });
   
-          xhr.addEventListener("error", () => {
-            cb(`Error. Status code: ${xhr.status}`, xhr);
+          request.addEventListener("error", () => {
+            callback(`Error. Status code: ${request.status}`, request);
           });
   
-          xhr.send();
+          request.send();
         } catch (error) {
-          cb(error);
+          callback(error);
         }
       },
-      post(url, body, headers, cb) {
+      post(url, body, headers, callback) {
         try {
-          const xhr = new XMLHttpRequest();
-          xhr.open("POST", url);
-          xhr.addEventListener("load", () => {
-            if (Math.floor(xhr.status / 100) !== 2) {
-              cb(`Error. Status code: ${xhr.status}`, xhr);
+          const request = new XMLHttpRequest();
+          request.open("POST", url);
+          request.addEventListener("load", () => {
+            if (Math.floor(request.status / 100) !== 2) {
+              callback(`Error. Status code: ${request.status}`, request);
               return;
             }
-            const response = JSON.parse(xhr.responseText);
-            cb(null, response);
+            const response = JSON.parse(request.responseText);
+            callback(null, response);
           });
   
-          xhr.addEventListener("error", () => {
-            cb(`Error. Status code: ${xhr.status}`, xhr);
+          request.addEventListener("error", () => {
+            callback(`Error. Status code: ${request.status}`, request);
           });
   
           if (headers) {
             Object.entries(headers).forEach(([key, value]) => {
-              xhr.setRequestHeader(key, value);
+              request.setRequestHeader(key, value);
             });
           }
-  
-          xhr.send(JSON.stringify(body));
+
+          request.send(JSON.stringify(body));
         } catch (error) {
-          cb(error);
+          callback(error);
         }
       },
     };

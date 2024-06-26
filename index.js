@@ -18,9 +18,12 @@ form.addEventListener('submit', (e)=> {
   loadNews()
 })
 
-//  init selects
+// init selects
+// when DOM content loaded activate: 
 document.addEventListener("DOMContentLoaded", function () {
+  // initialize all of the Materialize Components
   M.AutoInit();
+  // load news
   loadNews();
 });
 
