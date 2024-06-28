@@ -8,7 +8,8 @@ const newsService = (function () {
   return {
     topHeadlines(country = "ua", callback) {
       http.get(
-        `${apiUrl}/top-headlines?country=${country}&category=technology&apiKey=${apiKey}`,
+        // u can add &category=technology after ${country}, before &apiKey if u can tech news
+        `${apiUrl}/top-headlines?country=${country}&apiKey=${apiKey}`,
         callback
       );
     },

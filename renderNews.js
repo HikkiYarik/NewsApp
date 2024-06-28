@@ -5,10 +5,12 @@ function renderNews(news){
   if(newsContainer.children.length){
     cleanContainer(newsContainer)
   }
+  
   let fragment = '';
-  news.forEach(newsItem => {
+  news.forEach((newsItem, index) => {
     const el = newsTemplate(newsItem);
     fragment += el;
   });
   newsContainer.insertAdjacentHTML("afterbegin", fragment);
 }
+

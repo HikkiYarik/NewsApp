@@ -15,7 +15,17 @@ function onGetResponse(err, res) {
       removeEmptyMessage()
       return;
     }
-      ifEmptyImg(res.articles)
-      ifEmptyNews(res.articles)
-      renderNews(res.articles)
+    // filters for news
+    const articles = res.articles;
+    function goodest(el){
+      // if news not full - delete this news (they falses), else news - true and return to arr
+     if(el.description == '[Removed]' || el.title == '[Removed]' || el.description == null || el.title == null || el.content == null){
+      return false
+     }
+     return el
+    }
+  
+      ifEmptyImg(articles.filter(goodest))
+      renderNews(articles.filter(goodest))
   }
+  
